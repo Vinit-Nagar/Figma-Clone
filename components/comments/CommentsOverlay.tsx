@@ -14,17 +14,8 @@ type OverlayThreadProps = {
 };
 
 export const CommentsOverlay = () => {
-  /**
-   * We're using the useThreads hook to get the list of threads
-   * in the room.
-   *
-   * useThreads: https://liveblocks.io/docs/api-reference/liveblocks-react#useThreads
-   */
   const { threads } = useThreads();
-
-  // get the max z-index of a thread
   const maxZIndex = useMaxZIndex();
-
   return (
     <div>
       {threads
@@ -37,22 +28,8 @@ export const CommentsOverlay = () => {
 };
 
 const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
-  /**
-   * We're using the useEditThreadMetadata hook to edit the metadata
-   * of a thread.
-   *
-   * useEditThreadMetadata: https://liveblocks.io/docs/api-reference/liveblocks-react#useEditThreadMetadata
-   */
   const editThreadMetadata = useEditThreadMetadata();
-
-  /**
-   * We're using the useUser hook to get the user of the thread.
-   *
-   * useUser: https://liveblocks.io/docs/api-reference/liveblocks-react#useUser
-   */
   const { isLoading } = useUser(thread.comments[0].userId);
-
-  // We're using a ref to get the thread element to position it
   const threadRef = useRef<HTMLDivElement>(null);
 
   // If other thread(s) above, increase z-index on last element updated
@@ -61,7 +38,6 @@ const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
       return;
     }
 
-    // Update the z-index of the thread in the room
     editThreadMetadata({
       threadId: thread.id,
       metadata: {
@@ -83,7 +59,6 @@ const OverlayThread = ({ thread, maxZIndex }: OverlayThreadProps) => {
         transform: `translate(${thread.metadata.x}px, ${thread.metadata.y}px)`,
       }}
     >
-      {/* render the thread */}
       <PinnedThread thread={thread} onFocus={handleIncreaseZIndex} />
     </div>
   );
